@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shwetang Hiwase — AI Project Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a delivery record. Calm, factual, every claim labelled real or sample.
+   IDEA: an aircraft technical log. Each project is a log entry with a defect, an action, a sign-off.
+   PICTURE: the working RAG prototype (a tech-log query console) is the hero object.
+   COLOUR and TYPE: tech-log paper white, ink black, sky blue #0a5cff, signal red #e6261f, amber #ffb400 for warnings; Barlow Condensed + Barlow.
+   LAYOUT: sticky project tabs, one project per view, artefacts in ruled tables, demos at the top of their project. */
+:root{color-scheme:light dark;--bg:light-dark(#fbfaf6,#0e1116);--card:light-dark(#fff,#161b22);--ink:light-dark(#111418,#e9edf2);--mute:light-dark(#5b6370,#9aa4b2);--line:light-dark(#d9dce2,#2a313b);--blue:#0a5cff;--red:#e6261f;--amb:#ffb400;--grn:#00a05a;--tint:light-dark(#eef3ff,#14203a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Barlow Condensed",sans-serif;line-height:1.05;text-wrap:balance;margin:0 0 .4em}
+h1{font-size:clamp(34px,5vw,52px)}h2{font-size:clamp(28px,3.4vw,40px)}h3{font-size:22px;margin-top:1.4em}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}.wrap{max-width:1180px;margin:0 auto}
+header.band{background:var(--blue);color:#fff;padding-bottom:28px}header p{max-width:70ch;margin:.3em 0;opacity:.92}
+.honest{display:inline-block;background:#fff;color:#111;border-radius:6px;padding:8px 12px;font-size:14px;margin-top:10px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:2px solid var(--ink)}
+nav .scroll{display:flex;gap:4px;max-width:1180px;margin:0 auto;padding:0 max(5vw,16px)}
+nav a{flex:none;padding:12px 14px;min-height:44px;color:var(--ink);text-decoration:none;font:600 17px "Barlow Condensed";border-bottom:4px solid transparent}
+nav a.on{border-color:var(--red)}
+.scroll{overflow-x:auto}
+section.p{display:none}section.p.on{display:block}
+.tag{display:inline-block;font-size:13px;font-weight:600;padding:2px 8px;border-radius:4px;margin-right:6px;white-space:nowrap}
+.real{background:var(--grn);color:#fff}.samp{background:var(--amb);color:#111}.fill{background:var(--red);color:#fff}
+.lede{font-size:18px;max-width:70ch;color:var(--mute)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:start}
+@media(max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin:.4em 0 1em}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 15px "Barlow Condensed";letter-spacing:.02em;background:var(--tint)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+label{display:block;font-size:14px;font-weight:600;margin:10px 0 4px}
+input,select,textarea{font:16px Barlow,sans-serif;width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);min-height:44px}
+input:focus,button:focus,select:focus,a:focus{outline:3px solid var(--amb);outline-offset:2px}
+button{font:600 16px Barlow;min-height:44px;padding:8px 16px;border-radius:6px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+button.ghost{background:transparent;color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 140px}
+.console{background:#0e1116;color:#e9edf2;border-radius:10px;padding:16px;min-height:340px}
+.console .q{display:flex;gap:8px}.console input{background:#161b22;color:#fff;border-color:#2a313b}
+.ans{margin-top:14px;font-size:16px}.ans .cite{color:#8fb3ff;font-weight:600}
+.src{border-top:1px solid #2a313b;margin-top:10px;padding-top:8px;font-size:14px;color:#aab3c0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chips button{font-size:14px;min-height:36px;padding:4px 10px;background:#161b22;color:#cfe0ff;border:1px solid #2a313b}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px}
+.kpi b{display:block;font:700 clamp(26px,3vw,34px) "Barlow Condensed"}.kpi span{font-size:13px;color:var(--mute)}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue)}
+.ok{color:var(--grn);font-weight:600}.bad{color:var(--red);font-weight:600}
+.note{font-size:13px;color:var(--mute)}
+ul.tight{padding-left:1.1em;margin:.3em 0}ul.tight li{margin:.2em 0}
+blockquote{margin:1em 0;padding:12px 16px;border-left:4px solid var(--blue);background:var(--tint);border-radius:0 8px 8px 0}
+footer{color:var(--mute);font-size:14px}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;font-weight:600;white-space:normal}.stack td:empty{display:none}}
+@media(prefers-reduced-motion:no-preference){.bar i{transition:width .6s ease}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head><body>
+<header class="band"><div class="wrap">
+<h1>Shwetang Hiwase: AI project delivery portfolio</h1>
+<p>Four delivery case studies showing how I scope, build, measure, monitor and review AI projects. Background: MSc Business with Operations Management (Warwick), Reliability Engineering at Airbus Fleet Technical Management, and Operations Project Manager at Redapto.</p>
+<div class="honest"><span class="tag real">Real</span> built and measured &nbsp; <span class="tag samp">Sample</span> illustrative data &nbsp; <span class="tag fill">Fill in</span> my own figures go here</div>
+</div></header>
+<nav><div class="scroll" id="tabs">
+<a href="#p1">1 · Workflow automation</a><a href="#p2">2 · RAG chatbot</a><a href="#p3">3 · Risk &amp; monitoring</a><a href="#p4">4 · Estimation accuracy</a><a href="#p5">5 · Post-mortem</a>
+</div></nav>
+
+<!-- ============ P2 RAG ============ -->
+<section class="p band" id="p2"><div class="wrap">
+<span class="tag real">Real prototype</span><span class="tag samp">Synthetic manual</span>
+<h2>RAG assistant for an airline reliability programme manual</h2>
+<p class="lede">Reliability engineers lose time searching long programme manuals for alert-level rules, deferral limits and reporting deadlines. This assistant retrieves the relevant manual section, answers only from that section, cites it, and refuses when the manual doesn't cover the question.</p>
+<div class="grid2">
+<div class="console" aria-label="RAG prototype">
+<div class="q"><input id="qin" placeholder="Ask the manual, e.g. When is an alert level breached?" aria-label="Question"><button id="qgo" style="background:#0a5cff;border-color:#0a5cff;color:#fff;flex:none">Ask</button></div>
+<div class="row" style="margin-top:8px"><select id="ver" aria-label="Retriever version"><option value="2">Retriever v2 (with aviation abbreviation expansion)</option><option value="1">Retriever v1 (keyword only, original build)</option></select></div>
+<div class="chips" id="chips"></div>
+<div class="ans" id="ans"><span style="color:#aab3c0">Answers appear here with the cited manual section, retrieval scores and response time.</span></div>
+</div>
+<div>
+<h3 style="margin-top:0">How it works</h3>
+<ul class="tight">
+<li><b>Ingest:</b> the manual is split into 14 section-sized chunks, each with a section ID.</li>
+<li><b>Retrieve:</b> BM25 ranking over the chunks. v2 adds an aviation abbreviation dictionary (MEL, AOG, PIREP, MTBUR…).</li>
+<li><b>Answer:</b> extractive. The assistant quotes the best-matching sentences from the top section and cites it, so it can't hallucinate content.</li>
+<li><b>Guardrail:</b> if the top score is below the confidence threshold, it refuses and routes the question to the Reliability Engineer.</li>
+</ul>
+<p class="note">The corpus is a synthetic manual for a fictional operator ("Northwind Regional"), written for this prototype. It isn't a real airline or regulatory document. Production next step: swap extractive answers for an LLM constrained to the retrieved chunks, keeping the same eval set (Project 3).</p>
+</div></div>
+
+<h3>Product requirements (PRD summary)</h3>
+<table class="stack"><thead><tr><th>Item</th><th>Decision</th></tr></thead><tbody>
+<tr><td>Problem</td><td>Engineers search long reliability manuals by hand; wrong or late answers cause missed reporting deadlines and inconsistent deferral decisions.</td></tr>
+<tr><td>Users</td><td>Primary: reliability and technical-records engineers. Secondary: maintenance control (AOG decisions).</td></tr>
+<tr><td>In scope</td><td>Q&amp;A over one controlled manual; cited answers; refusal for out-of-scope questions.</td></tr>
+<tr><td>Out of scope</td><td>Airworthiness decisions, which stay with certifying staff. Live fleet data. Write-back to any system.</td></tr>
+<tr><td>Success metrics</td><td>Correct section in top 3 ≥ 90%; correct refusal on out-of-scope questions = 100%; response under 1 s; every answer cited.</td></tr>
+<tr><td>Non-functional</td><td>Answers trace to a section ID (audit trail); manual version shown; no personal data in the corpus.</td></tr>
+</tbody></table>
+<h3>Delivery plan</h3>
+<table class="stack"><thead><tr><th>Phase</th><th>Output</th><th>Exit criterion</th></tr></thead><tbody>
+<tr><td>1 · Discover</td><td>User questions collected; corpus chosen</td><td>12-question golden set agreed</td></tr>
+<tr><td>2 · Build v1</td><td>Keyword retriever + extractive answers</td><td>Runs end to end</td></tr>
+<tr><td>3 · Evaluate</td><td>Scored against golden set</td><td>Metrics vs targets documented</td></tr>
+<tr><td>4 · Fix → v2</td><td>Abbreviation expansion + refusal threshold</td><td>Targets met (see Project 3)</td></tr>
+<tr><td>5 · Review</td><td>Retrospective</td><td>Post-mortem published (Project 5)</td></tr>
+</tbody></table>
+<h3>RAID log (top items)</h3>
+<table class="stack"><thead><tr><th>Type</th><th>Item</th><th>Owner</th><th>Mitigation / status</th></tr></thead><tbody>
+<tr><td>Risk</td><td>Users treat answers as airworthiness approval</td><td>PM</td><td>Scope statement + disclaimer on every answer; refusal on decision questions</td></tr>
+<tr><td>Risk</td><td>Manual updated, index stale</td><td>Tech Records</td><td>Version stamp; re-index on each revision</td></tr>
+<tr><td>Assumption</td><td>Engineers phrase questions with abbreviations</td><td>PM</td><td>Validated in eval: v1 failed these; fixed in v2</td></tr>
+<tr><td>Issue</td><td>v1 missed abbreviation queries</td><td>Builder</td><td>Closed: synonym dictionary added</td></tr>
+<tr><td>Dependency</td><td>Controlled copy of manual from Quality</td><td>Quality</td><td>Synthetic manual used for prototype</td></tr>
+</tbody></table>
+</div></section>
+
+<!-- ============ P3 Monitoring ============ -->
+<section class="p band" id="p3"><div class="wrap">
+<span class="tag real">Real eval, run live in your browser</span>
+<h2>Risk and monitoring framework for the RAG assistant</h2>
+<p class="lede">The 12-question golden set runs against both retriever versions every time this page loads. The figures below are measured, not typed in. Caveat: 12 questions is a small set, and I wrote them myself. A perfect v2 score shows the fix worked, not that the assistant is production-ready. The next step is 50+ questions collected from real engineers.</p>
+<div class="kpi" id="kpis"></div>
+<div class="card"><div id="evalbars"></div></div>
+<h3>Golden-set results (v2)</h3>
+<div class="scroll"><table class="stack" id="evaltab"><thead><tr><th>Question</th><th>Expected</th><th>Top hit</th><th>Result</th></tr></thead><tbody></tbody></table></div>
+<h3>What to monitor after launch</h3>
+<table class="stack"><thead><tr><th>Signal</th><th>Metric</th><th>Threshold</th><th>Alert goes to</th><th>Response</th></tr></thead><tbody>
+<tr><td>Retrieval quality</td><td>Top-3 hit rate on weekly golden-set rerun</td><td>&lt; 90%</td><td>AI product owner</td><td>Freeze changes, inspect failed questions, extend dictionary or re-chunk</td></tr>
+<tr><td>Hallucination / grounding</td><td>% answers without a valid citation</td><td>&gt; 0%</td><td>AI product owner</td><td>Block release; incident ticket</td></tr>
+<tr><td>Refusal health</td><td>Refusal rate on live traffic</td><td>&gt; 25% or &lt; 2%</td><td>PM</td><td>Too high: content gap. Too low: threshold too loose</td></tr>
+<tr><td>Latency</td><td>p95 response time</td><td>&gt; 1 s</td><td>Platform engineer</td><td>Profile index; scale</td></tr>
+<tr><td>Content drift</td><td>Manual revision vs indexed version</td><td>Any mismatch</td><td>Tech Records lead</td><td>Re-index within 24 h</td></tr>
+<tr><td>User trust</td><td>👎 rate on answers</td><td>&gt; 10% weekly</td><td>PM</td><td>Review flagged answers with SMEs</td></tr>
+</tbody></table>
+<h3>Escalation ladder</h3>
+<table class="stack"><thead><tr><th>Level</th><th>Trigger</th><th>Named owner</th><th>Deadline</th></tr></thead><tbody>
+<tr><td>L1 Watch</td><td>One metric amber for one week</td><td>PM</td><td>Review at weekly ops meeting</td></tr>
+<tr><td>L2 Act</td><td>Metric breached two weeks running, or any uncited answer</td><td>AI product owner</td><td>Fix plan in 48 h</td></tr>
+<tr><td>L3 Pause</td><td>Answer contradicting the manual on a safety topic</td><td>Head of Reliability</td><td>Assistant disabled same day; incident review</td></tr>
+</tbody></table>
+</div></section>
+
+<!-- ============ P5 Post-mortem ============ -->
+<section class="p band" id="p5"><div class="wrap">
+<span class="tag real">Real failure, reproducible above</span>
+<h2>Post-mortem: v1 retriever failed on aviation abbreviations</h2>
+<p class="lede">Engineers write "MEL", "AOG" and "PIREP". The manual mostly spells them out. The v1 keyword retriever couldn't connect the two, so it either retrieved the wrong section or refused a valid question. Switch the selector on Project 2 to v1 and ask "What is the MEL Cat C limit?" to see it.</p>
+<div class="kpi" id="pmkpi"></div>
+<table class="stack"><thead><tr><th>Step</th><th>Finding</th></tr></thead><tbody>
+<tr><td>What went wrong</td><td>v1 passed every question written in full words, then failed the abbreviation questions in the golden set (exact count shown above, measured live).</td></tr>
+<tr><td>Why we missed it</td><td>The first test questions were written by me while reading the manual, so they reused the manual's wording. Real users don't. The test set was biased towards the corpus.</td></tr>
+<tr><td>Fix</td><td>(1) Abbreviation dictionary applied to the query before retrieval. (2) Golden set rewritten so half the questions use the shorthand engineers actually type. (3) Refusal threshold tuned on the new set.</td></tr>
+<tr><td>What I'd do differently</td><td>Collect real user questions before building and freeze the golden set before writing any retrieval code, so the test can't be shaped to fit the build.</td></tr>
+<tr><td>Residual risk</td><td>The dictionary is hand-maintained. New shorthand will fail silently until it's added, so the weekly golden-set rerun in Project 3 is the control.</td></tr>
+</tbody></table>
+<h3>Decisions and why</h3>
+<table class="stack"><thead><tr><th>Decision</th><th>Alternative rejected</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Extractive answers for the prototype</td><td>LLM-generated answers</td><td>Zero hallucination risk while validating retrieval. In aviation, a wrong answer costs more than a terse one.</td></tr>
+<tr><td>Refuse below a confidence threshold</td><td>Always answer</td><td>A "don't know" routed to an engineer is safer than a confident wrong deferral limit.</td></tr>
+<tr><td>Dictionary expansion</td><td>Embedding search</td><td>Fixes the measured failure today with no infrastructure. Embeddings are the next iteration.</td></tr>
+</tbody></table>
+</div></section>
+
+<!-- ============ P1 Redapto ============ -->
+<section class="p band" id="p1"><div class="wrap">
+<span class="tag fill">Fill in from Redapto</span>
+<h2>AI workflow automation at Redapto</h2>
+<p class="lede">Automate one real, repetitive operations process at Redapto with an LLM plus a task tool, and prove the impact with measured before/after numbers. The case study only counts once the red fields hold real figures.</p>
+<div class="grid2"><div class="card">
+<h3 style="margin-top:0">Impact calculator</h3>
+<div class="row"><div><label for="c1">Runs per week</label><input id="c1" type="number" value="20"></div><div><label for="c2">Manual minutes per run</label><input id="c2" type="number" value="45"></div></div>
+<div class="row"><div><label for="c3">Automated minutes per run (incl. human check)</label><input id="c3" type="number" value="8"></div><div><label for="c4">Errors per 100 runs, before → after</label><div class="row"><input id="c5" type="number" value="6" aria-label="Errors before"><input id="c6" type="number" value="2" aria-label="Errors after"></div></div></div>
+<div class="kpi" id="calc"></div>
+<p class="note"><span class="tag samp">Sample</span>Defaults are placeholders. Time two weeks of the manual process before switching anything on, and enter those numbers.</p>
+</div><div>
+<h3 style="margin-top:0">Candidate processes (pick one)</h3>
+<ul class="tight"><li>Weekly ops/KPI status report compiled from several trackers</li><li>Client or vendor request triage: classify, route, draft a reply</li><li>Meeting notes → actions and RAID-log updates</li><li>Approval requests chased by email</li></ul>
+<p class="note">Choose the one with the highest runs × minutes and a clear owner who'll sign off the before/after.</p>
+</div></div>
+<h3>Case-study template</h3>
+<table class="stack"><thead><tr><th>Section</th><th>What to write</th></tr></thead><tbody>
+<tr><td>Process</td><td><span class="tag fill">Fill in</span>Name, owner, trigger, steps, systems touched</td></tr>
+<tr><td>Baseline</td><td><span class="tag fill">Fill in</span>2 weeks of timed runs: minutes, errors, turnaround</td></tr>
+<tr><td>Design</td><td>LLM step (classify / extract / draft) + automation tool (Zapier, Make or Power Automate) + human approval gate</td></tr>
+<tr><td>Guardrails</td><td>Human approves anything sent externally; logs kept; fallback to the manual process</td></tr>
+<tr><td>After</td><td><span class="tag fill">Fill in</span>2 weeks live: same measures as baseline</td></tr>
+<tr><td>Decisions</td><td><span class="tag fill">Fill in</span>Two or three choices you made and what you rejected</td></tr>
+<tr><td>Sign-off</td><td><span class="tag fill">Fill in</span>Who confirmed the numbers (process owner)</td></tr>
+</tbody></table>
+</div></section>
+
+<!-- ============ P4 Estimation ============ -->
+<section class="p band" id="p4"><div class="wrap">
+<span class="tag real">Working tool</span><span class="tag samp">Sample history</span>
+<h2>Estimation accuracy: calibrating plans against actuals</h2>
+<p class="lede">Most project plans are wrong in the same direction. Teams estimate the best case (the planning fallacy), and status stays "green" until it suddenly turns red. This tool takes a team's own estimate-vs-actual history and turns a new estimate into a calibrated P50/P80 forecast, the reference-class forecasting approach recommended in HM Treasury's Green Book guidance on optimism bias.</p>
+<div class="grid2"><div class="card">
+<h3 style="margin-top:0">Past tasks (days)</h3>
+<div class="scroll"><table id="hist"><thead><tr><th>Task</th><th class="n">Estimate</th><th class="n">Actual</th><th class="n">Ratio</th><th></th></tr></thead><tbody></tbody></table></div>
+<div class="row"><button class="ghost" id="addrow">Add task</button><button class="ghost" id="clr">Clear sample</button></div>
+<p class="note">Sample history is illustrative. Replace it with a real team's closed tasks (Jira or MS Project export).</p>
+</div><div>
+<label for="newest">New task estimate (days)</label><input id="newest" type="number" value="10">
+<div class="kpi" id="fc"></div>
+<div id="biasmsg" class="card"></div>
+</div></div>
+<h3>How to use it in a project</h3>
+<table class="stack"><thead><tr><th>When</th><th>Action</th></tr></thead><tbody>
+<tr><td>Planning</td><td>Commit to P80 dates externally, manage the team to P50 internally.</td></tr>
+<tr><td>Each sprint / week</td><td>Log estimate vs actual for closed tasks; the multiplier updates itself.</td></tr>
+<tr><td>Status reporting</td><td>A task past its P50 is amber, past P80 is red, whatever the owner reports. This stops "green until it's red" reporting.</td></tr>
+<tr><td>Retrospective</td><td>Review which task types drift most and split estimates by type.</td></tr>
+</tbody></table>
+</div></section>
+
+<footer class="band"><div class="wrap">Shwetang Hiwase · Coventry, UK · Portfolio built November 2026. The aviation corpus is synthetic and for demonstration only; it is not operational guidance.</div></footer>
+
+<script>
+{
+/* ---------- corpus (synthetic) ---------- */
+const DOCS=[
+["RPM 2.1","Programme scope","This Reliability Programme Manual applies to the Northwind Regional fleet of 24 turboprop aircraft. It defines how component removals, pilot reports and technical delays are collected, analysed and acted on. The Reliability Review Board owns this manual and approves every revision."],
+["RPM 3.2","Pilot reports","A pilot report records a defect observed by the flight crew. Every pilot report must be entered in the technical log before the next flight. Pilot report rates are calculated per 1,000 flight hours for each ATA chapter."],
+["RPM 3.4","Alert levels","An alert level is set for each ATA chapter at the mean pilot report rate plus two standard deviations over the previous 12 months. An alert level is breached when the 3-month rolling rate exceeds the alert level for two consecutive months. A breach must be investigated and reported to the Reliability Review Board within 30 days."],
+["RPM 4.1","Unscheduled removals","Mean time between unscheduled removals is calculated per part number as total component flight hours divided by the number of unscheduled removals. A part number whose mean time between unscheduled removals falls 20 percent below its 12-month average is flagged for engineering review."],
+["RPM 4.3","No fault found","A removal is classified as no fault found when the shop finds no defect. Three no fault found removals of the same serial number within 12 months require a reliability investigation and a troubleshooting review with the line station."],
+["RPM 5.1","Deferred defects","Defects may be deferred only under the minimum equipment list and only by certifying staff. Category A items follow the interval stated in the remarks. Category B items must be rectified within 3 calendar days. Category C items must be rectified within 10 calendar days. Category D items must be rectified within 120 calendar days."],
+["RPM 5.2","Repetitive defects","A defect is repetitive when the same defect occurs on the same aircraft three times within 15 flight sectors. Repetitive defects are escalated to the Maintenance Control Centre and require a documented troubleshooting plan."],
+["RPM 6.1","Aircraft on ground","An aircraft on ground event is recorded when an aircraft cannot be dispatched because of a technical defect. Maintenance Control must notify the Reliability Engineer within 2 hours of an aircraft on ground event. Every aircraft on ground event is reviewed at the weekly reliability meeting."],
+["RPM 6.3","Technical dispatch reliability","Technical dispatch reliability is the percentage of scheduled departures that leave without a technical delay over 15 minutes or a cancellation. The fleet target is 99.0 percent. Performance below 98.5 percent for a month is reported to the Accountable Manager."],
+["RPM 7.1","Airworthiness directives","Airworthiness directives are tracked by Technical Records. Compliance status for every applicable airworthiness directive is reviewed monthly. An overdue airworthiness directive grounds the affected aircraft until compliance is shown."],
+["RPM 7.4","Service bulletins","Service bulletins are assessed by Engineering within 30 days of receipt. The assessment records whether the bulletin is embodied, deferred or rejected, with a reason. Reliability data is used to prioritise optional service bulletins."],
+["RPM 8.1","Reliability reporting","A monthly reliability report is issued by the tenth working day of each month. It contains pilot report rates by ATA chapter, alert level breaches, top unscheduled removals, technical dispatch reliability and open corrective actions."],
+["RPM 8.3","Corrective actions","Each corrective action has a named owner and a due date. Corrective actions open for more than 90 days are escalated to the Reliability Review Board. Effectiveness is checked three months after closure."],
+["RPM 9.1","Data quality","Technical log entries must include ATA chapter, aircraft registration, date and a defect description. Records missing an ATA chapter are returned to the line station within 5 working days for correction."]
+];
+const STOP=new Set("a an the is are was be of for to in on at by and or what when how do does which who within with must must should can i we it this that from per each as if after before my our any".split(" "));
+const SYN={mel:"minimum equipment list",aog:"aircraft on ground",pirep:"pilot report",pireps:"pilot report",mtbur:"mean time between unscheduled removals",nff:"no fault found",tdr:"technical dispatch reliability",ad:"airworthiness directive",ads:"airworthiness directive",sb:"service bulletin",sbs:"service bulletin",cat:"category",rrb:"reliability review board",mcc:"maintenance control centre",capa:"corrective action"};
+const tok=(s,v)=>{let w=s.toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/).filter(Boolean);if(v==2)w=w.flatMap(x=>SYN[x]?SYN[x].split(" "):[x]);return w.filter(x=>!STOP.has(x)).map(x=>x.replace(/s$/,""))};
+const DT=DOCS.map(d=>tok(d[1]+" "+d[2],1));const N=DT.length;const avg=DT.reduce((a,b)=>a+b.length,0)/N;
+const df={};DT.forEach(t=>new Set(t).forEach(w=>df[w]=(df[w]||0)+1));
+const idf=w=>Math.log(1+(N-(df[w]||0)+.5)/((df[w]||0)+.5));
+const THR=3.2;
+function search(q,v){const qt=tok(q,v);return DT.map((t,i)=>{let s=0;for(const w of new Set(qt)){const f=t.filter(x=>x===w).length;if(f)s+=idf(w)*f*2.2/(f+1.2*(.25+.75*t.length/avg))}return{i,s}}).sort((a,b)=>b.s-a.s)}
+function answer(q,v){const t0=performance.now();const r=search(q,v);const top=r[0];const ms=performance.now()-t0;
+ if(top.s<THR)return{refuse:true,r,ms};
+ const qt=new Set(tok(q,v));const sents=DOCS[top.i][2].split(/(?<=\.)\s+/);
+ const sc=sents.map((s,k)=>({s,k,v:tok(s,1).filter(w=>qt.has(w)).length})).sort((a,b)=>b.v-a.v).slice(0,2).sort((a,b)=>a.k-b.k);
+ return{refuse:false,r,ms,text:sc.map(x=>x.s).join(" "),doc:DOCS[top.i]}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const qin=document.getElementById("qin"),ans=document.getElementById("ans"),ver=document.getElementById("ver");
+function ask(){const q=qin.value.trim();if(!q)return;const a=answer(q,+ver.value);
+ const srcs=a.r.slice(0,3).map(x=>`${DOCS[x.i][0]} ${esc(DOCS[x.i][1])} · score ${x.s.toFixed(2)}`).join("<br>");
+ ans.innerHTML=(a.refuse?`<b style="color:#ffb400">Not covered by the manual.</b> I can't answer this from the Reliability Programme Manual with enough confidence, so I've routed it to the duty Reliability Engineer.`
+ :`${esc(a.text)} <span class="cite">[${a.doc[0]} ${esc(a.doc[1])}]</span><div class="note" style="color:#8a94a3;margin-top:6px">Information only. Airworthiness decisions remain with certifying staff.</div>`)
+ +`<div class="src">Top retrieved sections:<br>${srcs}<br>Response time ${a.ms.toFixed(1)} ms · retriever v${ver.value} · threshold ${THR}</div>`}
+document.getElementById("qgo").addEventListener("click",ask);qin.addEventListener("keydown",e=>{if(e.key==="Enter")ask()});
+ver.addEventListener("change",()=>{if(qin.value.trim())ask()});
+const EX=["When is an alert level breached?","What is the MEL Cat C limit?","Who must be told about an AOG?","How is MTBUR calculated?","What is the TDR target?","What's the weather in Coventry?"];
+document.getElementById("chips").innerHTML=EX.map(e=>`<button type="button">${esc(e)}</button>`).join("");
+document.querySelectorAll("#chips button").forEach(b=>b.addEventListener("click",()=>{qin.value=b.textContent;ask()}));
+
+/* ---------- eval (golden set) ---------- */
+const GOLD=[["When is an alert level breached?","RPM 3.4"],["What is the MEL Cat C rectification limit?","RPM 5.1"],["Who is notified after an AOG and how fast?","RPM 6.1"],["How is MTBUR calculated?","RPM 4.1"],["What is the fleet TDR target?","RPM 6.3"],["What happens when an AD is overdue?","RPM 7.1"],["How many NFF removals trigger an investigation?","RPM 4.3"],["When must a PIREP be entered in the tech log?","RPM 3.2"],["When is the monthly reliability report issued?","RPM 8.1"],["How long can a corrective action stay open before escalation?","RPM 8.3"],["What is the weather forecast for Coventry tomorrow?",null],["Who won the football last night?",null]];
+function runEval(v){let h1=0,h3=0,ref=0,refN=0,inN=0,ms=0;const rows=GOLD.map(([q,exp])=>{const a=answer(q,v);ms+=a.ms;const ids=a.r.slice(0,3).map(x=>DOCS[x.i][0]);let ok;
+ if(exp===null){refN++;ok=a.refuse;if(ok)ref++}else{inN++;const top=a.refuse?null:ids[0];if(top===exp)h1++;if(!a.refuse&&ids.includes(exp))h3++;ok=top===exp}
+ return{q,exp,top:a.refuse?"Refused":ids[0],ok}});
+ return{h1:h1/inN,h3:h3/inN,ref:ref/refN,ms:ms/GOLD.length,rows,inN,fail:inN-h1}}
+const E1=runEval(1),E2=runEval(2);
+const pct=x=>Math.round(x*100)+"%";
+const kpi=(v,l)=>`<div><b>${v}</b><span>${l}</span></div>`;
+document.getElementById("kpis").innerHTML=kpi(pct(E2.h1),"v2 correct section, top 1")+kpi(pct(E2.h3),"v2 correct section, top 3 (target ≥ 90%)")+kpi(pct(E2.ref),"v2 correct refusals (target 100%)")+kpi(E2.ms.toFixed(2)+" ms","v2 mean response (target < 1 s)");
+const bars=[["Top-1 hit",E1.h1,E2.h1],["Top-3 hit",E1.h3,E2.h3],["Correct refusal",E1.ref,E2.ref]];
+document.getElementById("evalbars").innerHTML=`<p style="margin:0 0 8px;font-weight:600">v1 (grey) vs v2 (blue), measured on the golden set</p>`+bars.map(([l,a,b])=>`<div style="margin:8px 0"><div class="row" style="justify-content:space-between"><span>${l}</span><span class="n">v1 ${pct(a)} → v2 ${pct(b)}</span></div><div class="bar"><i style="width:${a*100}%;background:var(--mute)"></i></div><div class="bar" style="margin-top:3px"><i style="width:${b*100}%"></i></div></div>`).join("");
+document.querySelector("#evaltab tbody").innerHTML=E2.rows.map(r=>`<tr><td>${esc(r.q)}</td><td>${r.exp||"Refuse"}</td><td>${r.top}</td><td class="${r.ok?"ok":"bad"}">${r.ok?"Pass":"Fail"}</td></tr>`).join("");
+document.getElementById("pmkpi").innerHTML=kpi(`${E1.fail} of ${E1.inN}`,"in-scope questions v1 got wrong")+kpi(`${E2.fail} of ${E2.inN}`,"in-scope questions v2 gets wrong")+kpi(pct(E1.h1)+" → "+pct(E2.h1),"top-1 accuracy, v1 → v2");
+
+/* ---------- P1 calculator ---------- */
+const g=id=>+document.getElementById(id).value||0;
+function calc(){const runs=g("c1"),m=g("c2"),a=g("c3"),eb=g("c5"),ea=g("c6");const saved=Math.max(0,(m-a)*runs*52/12/60);
+ document.getElementById("calc").innerHTML=kpi(saved.toFixed(1)+" h","hours saved per month")+kpi(m?Math.round((1-a/m)*100)+"%":"–","cycle time cut per run")+kpi(Math.max(0,(eb-ea)*runs*52/12/100).toFixed(1),"fewer errors per month")}
+["c1","c2","c3","c5","c6"].forEach(id=>document.getElementById(id).addEventListener("input",calc));calc();
+
+/* ---------- P4 estimation ---------- */
+let H=[["Requirements workshop",3,4],["Vendor onboarding",5,9],["Data migration",8,13],["UAT cycle",5,6],["Training rollout",4,7],["Process mapping",2,2],["Report build",6,8],["Stakeholder sign-off",2,5]];
+const tb=document.querySelector("#hist tbody");
+function q(arr,p){const s=[...arr].sort((a,b)=>a-b);if(!s.length)return 1;const i=(s.length-1)*p,lo=Math.floor(i);return s[lo]+(s[Math.ceil(i)]-s[lo])*(i-lo)}
+function drawH(){tb.innerHTML=H.map((r,i)=>`<tr><td><input aria-label="Task" data-i="${i}" data-k="0" value="${esc(r[0])}"></td><td class="n"><input aria-label="Estimate" type="number" data-i="${i}" data-k="1" value="${r[1]}" style="width:80px"></td><td class="n"><input aria-label="Actual" type="number" data-i="${i}" data-k="2" value="${r[2]}" style="width:80px"></td><td class="n" id="r${i}"></td><td><button class="ghost" data-del="${i}" aria-label="Remove">×</button></td></tr>`).join("");fc()}
+function fc(){const rs=H.filter(r=>r[1]>0&&r[2]>0).map(r=>r[2]/r[1]);H.forEach((r,i)=>{const c=document.getElementById("r"+i);if(c)c.textContent=r[1]>0&&r[2]>0?(r[2]/r[1]).toFixed(2)+"×":"–"});
+ const e=g("newest"),p50=q(rs,.5),p80=q(rs,.8),over=rs.filter(x=>x>1).length;
+ document.getElementById("fc").innerHTML=kpi(e.toFixed(1)+" d","team's raw estimate")+kpi((e*p50).toFixed(1)+" d",`P50 forecast (×${p50.toFixed(2)})`)+kpi((e*p80).toFixed(1)+" d",`P80 forecast (×${p80.toFixed(2)})`);
+ document.getElementById("biasmsg").innerHTML=rs.length?`<b>${over} of ${rs.length}</b> past tasks overran their estimate. The median overrun is <b>${Math.round((p50-1)*100)}%</b>. Commit externally to <b>${(e*p80).toFixed(1)} days</b>, not ${e}.`:"Add at least one completed task to calibrate."}
+tb.addEventListener("input",e=>{const t=e.target;if(t.dataset.i==null)return;const i=+t.dataset.i,k=+t.dataset.k;H[i][k]=k?+t.value:t.value;fc()});
+tb.addEventListener("click",e=>{const d=e.target.dataset.del;if(d!=null){H.splice(+d,1);drawH()}});
+document.getElementById("addrow").addEventListener("click",()=>{H.push(["New task",1,1]);drawH()});
+document.getElementById("clr").addEventListener("click",()=>{H=[];drawH()});
+document.getElementById("newest").addEventListener("input",fc);drawH();
+
+/* ---------- tabs ---------- */
+function route(){const h=(location.hash||"#p1").slice(1);const t=document.getElementById(h)&&/^p[1-5]$/.test(h)?h:"p1";
+ document.querySelectorAll("section.p").forEach(s=>s.classList.toggle("on",s.id===t));
+ document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+t))}
+addEventListener("hashchange",()=>{route();scrollTo(0,document.querySelector("nav").offsetTop)});route();
+}
+</script>
+</body></html>
